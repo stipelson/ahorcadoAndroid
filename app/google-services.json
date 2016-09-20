@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "428963363980",
+    "firebase_url": "https://ahorcado-370c4.firebaseio.com",
+    "project_id": "ahorcado-370c4",
+    "storage_bucket": "ahorcado-370c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428963363980:android:952d954802db02e4",
+        "android_client_info": {
+          "package_name": "com.example.styven.ahorcado"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "428963363980-8a7rn2o7dfsqoaflikjl492ct387ooov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNqWjg4gD488SFumZNtgSEBBB540x1K8I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
