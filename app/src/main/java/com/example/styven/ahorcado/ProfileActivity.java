@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         buttonContinueGame.setTypeface(custom_font);
         buttonNewGame.setTypeface(custom_font);
 
-        textViewUserEmail.setText("Bienvenido "+user.getEmail());
+        textViewUserEmail.setText("Bienvenido "+ usuario(user.getEmail()));
         textViewUserEmail.setTypeface(custom_font);
 
         imageButtonSignOut = (ImageButton) findViewById(R.id.imageButtonSignOut);
@@ -55,6 +56,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         buttonContinueGame.setOnClickListener(this);
         buttonGameHistory.setOnClickListener(this);
     }
+    private String usuario(String email){
+        String user = "";
+        if (email.contains("@")) {
+            String[] parts = email.split("@");
+            user = parts[0];
+        } else {
+            user = email;
+        }
+        return user;
+    }
 
     @Override
     public void onClick(View view) {
@@ -62,6 +73,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             firebaseAuth.signOut();
             finish();
             startActivity(new Intent(this, LoginActivity.class));
+        }
+        if (view == buttonNewGame) {
+            finish();
+            startActivity(new Intent(this, GameActivity.class));
+        }
+        if (view == buttonContinueGame || view == buttonGameHistory){
+            Toast.makeText(this, "En construcción", Toast.LENGTH_SHORT).show();
+            return;
         }
     }
 }

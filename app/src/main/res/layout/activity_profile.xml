@@ -51,7 +51,7 @@
             android:layout_margin="15dp"
             android:id="@+id/buttonNewGame"
             android:layout_width="match_parent"
-            android:text="Partida nueva"
+            android:text="Nueva partida"
             android:layout_height="wrap_content"
             android:background="@drawable/button"
             android:textSize="25sp" />
