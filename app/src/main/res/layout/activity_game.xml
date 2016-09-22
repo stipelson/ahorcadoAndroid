@@ -15,7 +15,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:id="@+id/linearLayout3">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -65,6 +66,21 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
 
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:id="@+id/gridLayoutIngresos"
+                android:layout_above="@+id/gridLayoutIngresos"
+                android:columnCount="12"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="115dp">
+
+
+            </GridLayout>
+
         </LinearLayout>
     </ScrollView>
 
@@ -91,11 +107,14 @@
             android:id="@+id/editTextLetterWord"
             android:hint="Letra o palabra"
             android:layout_alignBottom="@+id/imageButtonSignOut"
-            android:layout_centerHorizontal="true"
             android:imeOptions="actionDone"
             android:singleLine="true" />
 
 
+
+
     </RelativeLayout>
+
+
 
 </RelativeLayout>

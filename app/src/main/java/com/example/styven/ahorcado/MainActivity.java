@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textViewTitleApp;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private static final String TAG = "EmailPassword";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +90,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
+                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
                                 finish();
                                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        }else{
-                            Toast.makeText(MainActivity.this, "Error al registrar, intentalo de nuevo", Toast.LENGTH_SHORT).show();
                         }
+                        if (!task.isSuccessful()) {
+                            Log.d(TAG, "createUserWithEmail:failed:" + task.getException());
+
+                            Toast.makeText(MainActivity.this, "Error en el registro de usuario.",
+                                    Toast.LENGTH_SHORT).show();
+
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthWeakPasswordException e) {
+                                editTextPassword.setError("Mininmo 6 caracteres");
+                                editTextPassword.requestFocus();
+                                editTextEmail.setError(null);
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                editTextEmail.setError("Dirección Email invalida");
+                                editTextEmail.requestFocus();
+                                editTextPassword.setError(null);
+                            }  catch(FirebaseAuthUserCollisionException e) {
+                                editTextEmail.setError("El usuario ya esta registrado");
+                                editTextEmail.requestFocus();
+                                editTextPassword.setError(null);
+                            } catch(Exception e) {
+                                Log.e(TAG, e.getMessage());
+                            }
+                        }
+
                         progressDialog.dismiss();
                     }
                 });

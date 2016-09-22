@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton imageButtonSignOut;
     private ImageButton imageButtonBack;
     private EditText editTextLetterWord;
+    private GridLayout gridLayoutIngresos;
+    private int idCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +41,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         respuesta = (TextView) findViewById(R.id.textViewRespuesta);
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/beermoney.ttf");
+        final Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/beermoney.ttf");
 
         respuesta.setTypeface(custom_font);
 
         editTextLetterWord = (EditText) findViewById(R.id.editTextLetterWord);
         editTextLetterWord.setTypeface(custom_font);
+
+        gridLayoutIngresos = (GridLayout) findViewById(R.id.gridLayoutIngresos);
+
+        idCount = 30;
 
         editTextLetterWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -51,10 +58,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 boolean handle = false;
                 if (actionId == EditorInfo.IME_ACTION_DONE){
                     String inputText = v.getText().toString().trim();
-                    Toast.makeText(GameActivity.this, "Tu ingreso es: " + inputText, Toast.LENGTH_SHORT).show();
+                    idCount += 1;
+                    //Toast.makeText(GameActivity.this, "Tu ingreso es: " + inputText, Toast.LENGTH_SHORT).show();
                     // Ocultando el teclado
                     InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    // agregando el ingreso a la grid
+                    TextView ingreso = new TextView(GameActivity.this);
+
+                    ingreso.setTextSize(30);
+                    ingreso.setId(idCount);
+                    ingreso.setText(inputText + idCount);
+                    ingreso.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                    ingreso.setTypeface(custom_font);
+                    ingreso.setPadding(5, 3, 5, 0);
+                    gridLayoutIngresos.addView(ingreso);
+
                     // setiando el contenido del edit text
                     editTextLetterWord.setText("");
 

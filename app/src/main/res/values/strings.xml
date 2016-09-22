@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ahorcado</string>
+    <string name="auth_failed">Error de autenticación</string>
 </resources>
