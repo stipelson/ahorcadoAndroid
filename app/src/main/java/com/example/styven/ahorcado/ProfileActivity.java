@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,6 +13,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -21,16 +27,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Button buttonContinueGame;
     private Button buttonNewGame;
     private Button buttonGameHistory;
-
+    private FirebaseUser user;
+    private static final String TAG = "dataBase";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        //auth != null
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if (firebaseAuth.getCurrentUser() == null){
+        if(firebaseAuth.getCurrentUser() != null){
+            user = firebaseAuth.getCurrentUser();
+        }else{
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
