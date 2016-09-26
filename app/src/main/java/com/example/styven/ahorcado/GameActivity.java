@@ -108,7 +108,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                             }
                         }
-
                         gridLayoutIngresos.addView(ingreso);
 
                     }else{

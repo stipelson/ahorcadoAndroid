@@ -32,7 +32,6 @@ public class AhorcadoGAme {
         esLetra = false;
         arraySecreto = new String[palabra.length()];
         palabraSecreta = formarPalabraSecreta(word);
-
     }
 
     private String formarPalabraSecreta(String word){
@@ -103,13 +102,19 @@ public class AhorcadoGAme {
             if(palabra.contains(wordLetter)){
                 perdio = false;
                 correcta = true;
+                String temPalabraArmada = "";
                 // aqui se modifica palabra secreta para reimprimirla
                 for (int i=1;i <= palabra.length();i++){
                     if(palabra.substring((i-1),i).equals(wordLetter)){
                        arraySecreto[i-1] = wordLetter.toUpperCase();
                     }
+                    temPalabraArmada += arraySecreto[i-1];
                 }
                 Log.v(TAG, "Array Palabra secreta = " + Arrays.toString(arraySecreto));
+                Log.v(TAG, "Palabra temporal armada = " + temPalabraArmada);
+                if(temPalabraArmada.toLowerCase().equals(palabra.toLowerCase())){
+                    gano = true;
+                }
                 reformarPalabraSecreta(arraySecreto);
             }else{
                 correcta = false;
