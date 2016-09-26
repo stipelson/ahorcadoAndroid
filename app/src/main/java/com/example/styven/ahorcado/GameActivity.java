@@ -91,7 +91,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                         // si completa 5 errores con el ingreso actual perdio = true
                         if(ahorcadoGame.esCorrecta()){
-                            ingreso.setTextColor(Color.parseColor("#4caf50"));
+                            //ingreso.setTextColor(Color.parseColor("#4caf50"));
                             if(!ahorcadoGame.getGano()){
                                 //si no ha ganado aun
                                 respuesta.setText(ahorcadoGame.getPalabraSecreta());

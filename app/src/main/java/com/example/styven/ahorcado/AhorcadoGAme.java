@@ -25,7 +25,7 @@ public class AhorcadoGAme {
     private String[] arraySecreto;
 
     public AhorcadoGAme(String word){
-        palabra = word.trim();
+        palabra = word.trim().toLowerCase();
         errores = 0;
         gano = false;
         perdio = false;
@@ -81,7 +81,7 @@ public class AhorcadoGAme {
     public int getErrores() {  return errores; }
 
     public void validar(String wordLetter){
-
+        wordLetter = wordLetter.toLowerCase().trim();
         if (wordLetter.trim().length() > 1){
             // *************  es una palabra
 
@@ -89,7 +89,7 @@ public class AhorcadoGAme {
             Log.v(TAG, "Palabra: Es una palabra lo que ingresaste " + wordLetter);
             String temPalabra = wordLetter.toString();
 
-            if(wordLetter.toLowerCase().trim().equals(palabra.toLowerCase().trim())){
+            if(wordLetter.equals(palabra.toLowerCase().trim())){
                 Log.v(TAG, "el ingreso y la palabra son iguales");
                 gano = true;
             }
@@ -106,7 +106,7 @@ public class AhorcadoGAme {
                 // aqui se modifica palabra secreta para reimprimirla
                 for (int i=1;i <= palabra.length();i++){
                     if(palabra.substring((i-1),i).equals(wordLetter)){
-                       arraySecreto[i-1] = wordLetter;
+                       arraySecreto[i-1] = wordLetter.toUpperCase();
                     }
                 }
                 Log.v(TAG, "Array Palabra secreta = " + Arrays.toString(arraySecreto));
