@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,9 +15,11 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +35,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private GridLayout gridLayoutIngresos;
     private AhorcadoGAme ahorcadoGame;
     private static String TAG = "gameactivity: ";
+    private Chronometer chronometer;
+    private TextView textviewErrores;
+    private ImageView imageViewGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         respuesta = (TextView) findViewById(R.id.textViewRespuesta);
         final Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/beermoney.ttf");
         respuesta.setTypeface(custom_font);
+        chronometer = (Chronometer) findViewById(R.id.chronometer);
+        chronometer.start();
+        Log.v(TAG, "formato de cronotmetro" + chronometer.getFormat());
 
         if (firebaseAuth.getCurrentUser() != null){
             Intent myIntent = getIntent();
@@ -59,12 +68,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         editTextLetterWord.setTypeface(custom_font);
 
         gridLayoutIngresos = (GridLayout) findViewById(R.id.gridLayoutIngresos);
+        textviewErrores = (TextView) findViewById(R.id.textViewErrores);
+        textviewErrores.setTextColor(Color.parseColor("#ef5350"));
+        textviewErrores.setTypeface(custom_font);
+        imageViewGame = (ImageView) findViewById(R.id.imageViewGame);
 
         editTextLetterWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handle = false;
                 if (actionId == EditorInfo.IME_ACTION_DONE){
+
                     String inputText = v.getText().toString().trim();
                     //Toast.makeText(GameActivity.this, "Tu ingreso es: " + inputText, Toast.LENGTH_SHORT).show();
                     // Ocultando el teclado
@@ -101,6 +115,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }else{
                             ingreso.setTextColor(Color.parseColor("#ef5350"));
+                            int idImageGame = getResources().getIdentifier("game"+ahorcadoGame.getErrores(), "drawable", getPackageName());
+                            textviewErrores.setText("Errores: " + ahorcadoGame.getErrores());
+                            imageViewGame.setImageResource(idImageGame);
                             if (ahorcadoGame.getPerdio()){
                                 perdio();
                             }else{

@@ -26,11 +26,11 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewGame"
                 android:layout_alignBottom="@+id/scrollView"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/horca1_2"
+                android:src="@drawable/game"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -42,6 +42,14 @@
                 android:id="@+id/textViewRespuesta"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text=""
+                android:id="@+id/textViewErrores"
+                android:layout_gravity="center_horizontal" />
 
 
             <GridLayout
@@ -59,12 +67,14 @@
 
             </GridLayout>
 
+
+
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -103,7 +113,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:id="@+id/linearLayout3">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -116,5 +127,16 @@
             android:background="#00ffffff"/>
 
     </LinearLayout>
+
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
+        android:format="%s"
+        android:textSize="13sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/linearLayout3"
+        android:layout_alignEnd="@+id/linearLayout3"
+        android:countDown="true" />
 
 </RelativeLayout>

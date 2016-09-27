@@ -118,9 +118,10 @@ public class AhorcadoGAme {
                 reformarPalabraSecreta(arraySecreto);
             }else{
                 correcta = false;
-                errores ++;
                 if (errores >= 5){
                     perdio = true;
+                }else{
+                    errores ++;
                 }
             }
         }
