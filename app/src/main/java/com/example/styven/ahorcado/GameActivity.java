@@ -157,24 +157,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 .setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        startActivity(new Intent(GameActivity.this, ProfileActivity.class));
+                        //finish();
+                        //startActivity(new Intent(GameActivity.this, ProfileActivity.class));
                         dialog.dismiss();
                     }
                 }).show();
+        editTextLetterWord.setFocusable(false);
     }
 
     public void perdio(){
+
         new AlertDialog.Builder(GameActivity.this)
                 .setMessage("¡Has perdido!, la palabra era: "+ ahorcadoGame.getPalabra().toString())
                 .setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        startActivity(new Intent(GameActivity.this, ProfileActivity.class));
+                        //finish();
+                        //startActivity(new Intent(GameActivity.this, ProfileActivity.class));
                         dialog.dismiss();
                     }
                 }).show();
+
+        //startActivity(new Intent(GameActivity.this, Pop.class));
+        editTextLetterWord.setFocusable(false);
     }
 
     @Override

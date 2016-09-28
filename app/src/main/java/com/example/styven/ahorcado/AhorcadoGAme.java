@@ -1,5 +1,7 @@
 package com.example.styven.ahorcado;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -80,6 +82,7 @@ public class AhorcadoGAme {
     public int getErrores() {  return errores; }
 
     public void validar(String wordLetter){
+
         wordLetter = wordLetter.toLowerCase().trim();
         if (wordLetter.trim().length() > 1){
             // *************  es una palabra
@@ -117,11 +120,12 @@ public class AhorcadoGAme {
                 }
                 reformarPalabraSecreta(arraySecreto);
             }else{
+                errores ++;
                 correcta = false;
                 if (errores >= 5){
                     perdio = true;
                 }else{
-                    errores ++;
+
                 }
             }
         }
