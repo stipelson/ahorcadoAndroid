@@ -91,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(new Intent(this, LoginActivity.class));
         }
         if (view == buttonNewGame) {
+            /*
             progressDialog.setMessage("Buscando palabra aleatoria...");
             progressDialog.show();
 
@@ -128,7 +129,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     return;
                 }
             });
-
+            */
+            Intent intentJuego = new Intent(ProfileActivity.this, GameActivity.class);
+            intentJuego.putExtra("nuevoJuego","true");
+            finish();
+            startActivity(intentJuego);
 
         }
         if (view == buttonContinueGame || view == buttonGameHistory){

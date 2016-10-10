@@ -36,6 +36,8 @@ public class Pop extends Activity{
         int altura = dm.heightPixels;
 
         getWindow().setLayout((int)(ancho*.6), (int)(altura*.6));
+        getWindow().setBackgroundDrawable(new ColorDrawable(
+                android.graphics.Color.TRANSPARENT));
     }
 
     @Override

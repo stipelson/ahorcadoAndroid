@@ -84,12 +84,15 @@ public class AhorcadoGAme {
     public void validar(String wordLetter){
 
         wordLetter = wordLetter.toLowerCase().trim();
+        String[] palabraArray = palabra.split("");
         if (wordLetter.trim().length() > 1){
             // *************  es una palabra
 
             esLetra = false;
             Log.v(TAG, "Palabra: Es una palabra lo que ingresaste " + wordLetter);
             String temPalabra = wordLetter.toString();
+
+            reformarPalabraSecreta(palabraArray);
 
             if(wordLetter.equals(palabra.toLowerCase().trim())){
                 Log.v(TAG, "el ingreso y la palabra son iguales");
@@ -123,6 +126,7 @@ public class AhorcadoGAme {
                 errores ++;
                 correcta = false;
                 if (errores >= 5){
+                    reformarPalabraSecreta(palabraArray);
                     perdio = true;
                 }else{
 

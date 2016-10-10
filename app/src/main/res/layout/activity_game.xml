@@ -95,7 +95,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/relativeLayout">
 
         <EditText
             android:layout_width="wrap_content"
@@ -116,6 +117,9 @@
         android:layout_alignParentRight="true"
         android:id="@+id/linearLayout3">
 
+
+
+
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,8 +129,15 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:background="#00ffffff"/>
-
     </LinearLayout>
+
+    <ImageButton
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonNewGame"
+        android:src="@drawable/nuevojuego"
+        android:background="#00ffffff"/>
 
     <Chronometer
         android:layout_width="wrap_content"
