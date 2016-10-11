@@ -1,6 +1,7 @@
 package com.example.styven.ahorcado;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -78,54 +79,62 @@ public class HistoryActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             //Game game = dataSnapshot.getValue(Game.class);
-                            Log.v(TAG, "Historial de juego es:" + dataSnapshot.getValue().toString());
-                            for (DataSnapshot gameSnapshot: dataSnapshot.getChildren()){
-                                //String tiempo = gameSnapshot.child("tiempo").getValue().toString();
-                                //Log.v(TAG, "Historial de tiempos: " + tiempo);
+                            try {
+                                for (DataSnapshot gameSnapshot : dataSnapshot.getChildren()) {
+                                    //String tiempo = gameSnapshot.child("tiempo").getValue().toString();
+                                    //Log.v(TAG, "Historial de tiempos: " + tiempo);
 
-                                TextView ganoGrid = new TextView(HistoryActivity.this);
-                                TextView palabraGrid = new TextView(HistoryActivity.this);
-                                TextView tiempoGrid = new TextView(HistoryActivity.this);
-                                TextView erroresGrid = new TextView(HistoryActivity.this);
-                                //set textSize
-                                erroresGrid.setTextSize(20);
-                                palabraGrid.setTextSize(20);
-                                tiempoGrid.setTextSize(20);
-                                ganoGrid.setTextSize(20);
-                                //set typeFace
-                                erroresGrid.setTypeface(custom_font);
-                                palabraGrid.setTypeface(custom_font);
-                                ganoGrid.setTypeface(custom_font);
-                                tiempoGrid.setTypeface(custom_font);
+                                    TextView ganoGrid = new TextView(HistoryActivity.this);
+                                    TextView palabraGrid = new TextView(HistoryActivity.this);
+                                    TextView tiempoGrid = new TextView(HistoryActivity.this);
+                                    TextView erroresGrid = new TextView(HistoryActivity.this);
+                                    //set textSize
+                                    erroresGrid.setTextSize(20);
+                                    palabraGrid.setTextSize(20);
+                                    tiempoGrid.setTextSize(20);
+                                    ganoGrid.setTextSize(20);
+                                    //set typeFace
+                                    erroresGrid.setTypeface(custom_font);
+                                    palabraGrid.setTypeface(custom_font);
+                                    ganoGrid.setTypeface(custom_font);
+                                    tiempoGrid.setTypeface(custom_font);
 
-                                //erroresGrid.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                //set padding
+                                    //erroresGrid.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    //set padding
 
-                                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER | Gravity.CENTER_VERTICAL);
+                                    erroresGrid.setPadding(10, 10, 10, 10);
+                                    erroresGrid.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    palabraGrid.setPadding(10, 10, 10, 10);
+                                    palabraGrid.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    ganoGrid.setPadding(10, 10, 10, 10);
+                                    ganoGrid.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                                erroresGrid.setPadding(10,10,10,10);
-                                erroresGrid.setGravity(Gravity.CENTER_HORIZONTAL);
-                                palabraGrid.setPadding(10,10,10,10);
-                                palabraGrid.setGravity(Gravity.CENTER_HORIZONTAL);
-                                ganoGrid.setPadding(10,10,10,10);
-                                ganoGrid.setGravity(Gravity.CENTER_HORIZONTAL);
-                                tiempoGrid.setPadding(10,10,10,10);
-                                tiempoGrid.setLayoutParams(params);
+                                    tiempoGrid.setPadding(10, 10, 10, 10);
+                                    tiempoGrid.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                                // set content
-                                erroresGrid.setText(gameSnapshot.child("errores").getValue().toString());
-                                palabraGrid.setText(gameSnapshot.child("palabra").getValue().toString());
-                                tiempoGrid.setText(gameSnapshot.child("tiempo").getValue().toString());
-                                if(gameSnapshot.child("gano").toString() == "true"){
-                                    ganoGrid.setText("Gano");
-                                }else{
-                                    ganoGrid.setText("Perdio");
+                                    // set content
+                                    erroresGrid.setText(gameSnapshot.child("errores").getValue().toString());
+                                    palabraGrid.setText(gameSnapshot.child("palabra").getValue().toString());
+                                    tiempoGrid.setText(gameSnapshot.child("tiempo").getValue().toString());
+
+                                    Log.v(TAG, "Historial de tiempos: " + gameSnapshot.child("gano").getValue().toString());
+                                    if (gameSnapshot.child("gano").getValue().toString() == "true") {
+                                        ganoGrid.setTextColor(Color.parseColor("#4caf50"));
+                                        ganoGrid.setText("Gano");
+                                    } else {
+                                        ganoGrid.setTextColor(Color.parseColor("#ef5350"));
+                                        ganoGrid.setText("Perdio");
+                                    }
+
+                                    gridHistory.addView(ganoGrid);
+                                    gridHistory.addView(palabraGrid);
+                                    gridHistory.addView(erroresGrid);
+                                    gridHistory.addView(tiempoGrid);
                                 }
-
-                                gridHistory.addView(ganoGrid);
-                                gridHistory.addView(palabraGrid);
-                                gridHistory.addView(erroresGrid);
-                                gridHistory.addView(tiempoGrid);
+                            }catch(Exception e){
+                                Log.v(TAG, "Error en historial:" + e.getMessage());
+                                Toast.makeText(HistoryActivity.this, "No hay historial para mostrar", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                         }
 
