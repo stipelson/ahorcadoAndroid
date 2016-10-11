@@ -53,6 +53,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
     private ImageButton imageButtonNewGame;
     private FirebaseDatabase database;
+    private FirebaseUser user;
+    private boolean juegoTerminado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +63,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
-
+        juegoTerminado = false;
         respuesta = (TextView) findViewById(R.id.textViewRespuesta);
         custom_font = Typeface.createFromAsset(getAssets(),  "fonts/beermoney.ttf");
         respuesta.setTypeface(custom_font);
@@ -84,6 +87,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if(juegoNuevo.equals("true")){
                 //ahorcadoGame = new AhorcadoGAme(myIntent.getStringExtra("palabraAleatoria"));
                 obtenerPalabraAleatoria();
+            }else{
+                continuarJuego();
             }
             //respuesta.setText(ahorcadoGame.getPalabraSecreta());
 
@@ -100,6 +105,52 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         imageButtonNewGame = (ImageButton) findViewById(R.id.imageButtonNewGame);
         imageButtonNewGame.setVisibility(View.INVISIBLE);
         imageButtonNewGame.setOnClickListener(this);
+    }
+
+    public void continuarJuego(){
+        //(String palabra, boolean gano, boolean perdio, int errores, String palabraSecreta)
+
+        progressDialog.setMessage("Cargando partida...");
+        progressDialog.show();
+
+        DatabaseReference myRef = database.getReference();
+
+        myRef.child("continue").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    String bdPalabra = dataSnapshot.child("palabra").getValue().toString();
+                    boolean bdGano = Boolean.parseBoolean(dataSnapshot.child("gano").getValue().toString());
+                    boolean bdPerdio = Boolean.parseBoolean(dataSnapshot.child("perdio").getValue().toString());
+                    int bdErrores = Integer.parseInt(dataSnapshot.child("errores").getValue().toString());
+                    String bdPalabraSecreta = dataSnapshot.child("palabraSecreta").getValue().toString();
+
+                    ahorcadoGame = new AhorcadoGAme(bdPalabra, bdGano, bdPerdio, bdErrores, bdPalabraSecreta);
+
+                    respuesta.setText(ahorcadoGame.getPalabraSecreta());
+                    int idImageGame = getResources().getIdentifier("game"+ahorcadoGame.getErrores(), "drawable", getPackageName());
+                    textviewErrores.setText("Errores: " + ahorcadoGame.getErrores());
+                    imageViewGame.setImageResource(idImageGame);
+
+                    progressDialog.dismiss();
+
+                }catch(Exception e){
+                    Log.v(TAG, "Error en continuar:" + e.getMessage());
+                    progressDialog.dismiss();
+                    Toast.makeText(GameActivity.this, "No hay Partida guardada", Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressDialog.dismiss();
+                Toast.makeText(GameActivity.this, "Imposible obtener la partida guardada", Toast.LENGTH_SHORT).show();
+
+                return;
+            }
+        });
     }
 
     public void obtenerPalabraAleatoria(){
@@ -129,6 +180,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                progressDialog.dismiss();
                 Toast.makeText(GameActivity.this, "Imposible obtener una palabra", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -149,6 +201,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public void gano(){
         chronometer.stop();
+        juegoTerminado = true;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         saveHistory(user.getUid(), ahorcadoGame.getPalabra(), chronometer.getText().toString(), ahorcadoGame.getErrores(), ahorcadoGame.getGano());
 
@@ -170,7 +223,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void perdio(){
         //startActivity(new Intent(GameActivity.this, Pop.class));
         chronometer.stop();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        juegoTerminado = true;
         saveHistory(user.getUid(), ahorcadoGame.getPalabra(), chronometer.getText().toString(), ahorcadoGame.getErrores(), ahorcadoGame.getGano());
         new AlertDialog.Builder(GameActivity.this)
                 .setMessage("¡Perdiste!... La palabra era: " + ahorcadoGame.getPalabra())
@@ -187,14 +240,27 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         imageButtonNewGame.setVisibility(View.VISIBLE);
     }
 
+    private void saveGame(){
+
+        DatabaseReference myRef = database.getReference();
+        Map<String, Object> gameValues = ahorcadoGame.toMap(chronometer.getText().toString());
+        myRef.child("continue").child(user.getUid()).setValue(gameValues);
+    }
+
     @Override
     public void onClick(View view) {
         if (view == imageButtonSignOut){
+            if(!juegoTerminado){
+                saveGame();
+            }
             firebaseAuth.signOut();
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
         if (view == imageButtonBack){
+            if(!juegoTerminado){
+                saveGame();
+            }
             finish();
             startActivity(new Intent(this, ProfileActivity.class));
         }

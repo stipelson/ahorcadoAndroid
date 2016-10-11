@@ -8,6 +8,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Pelusa on 24/09/2016.
@@ -34,6 +36,17 @@ public class AhorcadoGAme {
         esLetra = false;
         arraySecreto = new String[palabra.length()];
         palabraSecreta = formarPalabraSecreta(word);
+    }
+
+    public AhorcadoGAme(String palabra, boolean gano, boolean perdio, int errores, String palabraSecreta){
+        this.palabra = palabra.trim().toLowerCase();
+        this.errores = errores;
+        this.gano = gano;
+        this.perdio = perdio;
+        esLetra = false;
+        arraySecreto = new String[palabra.length()];
+        this.palabraSecreta = palabraSecreta;
+        arraySecreto = palabraSecreta.trim().split(" ");
     }
 
     private String formarPalabraSecreta(String word){
@@ -133,6 +146,18 @@ public class AhorcadoGAme {
                 }
             }
         }
+    }
+
+    public Map<String, Object> toMap(String tiempo) {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("palabra", palabra);
+        result.put("tiempo", tiempo);
+        result.put("errores", errores);
+        result.put("gano", gano);
+        result.put("perdio", perdio);
+        result.put("palabraSecreta", palabraSecreta);
+
+        return result;
     }
 
 }
