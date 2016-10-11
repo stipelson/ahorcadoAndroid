@@ -136,9 +136,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(intentJuego);
 
         }
-        if (view == buttonContinueGame || view == buttonGameHistory){
+        if (view == buttonContinueGame){
             Toast.makeText(this, "En construcción", Toast.LENGTH_SHORT).show();
             return;
+        }
+        if(view == buttonGameHistory){
+            finish();
+            startActivity(new Intent(this, HistoryActivity.class));
         }
     }
 }

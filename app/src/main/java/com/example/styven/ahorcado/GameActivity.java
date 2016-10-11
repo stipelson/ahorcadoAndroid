@@ -25,12 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener {
@@ -49,6 +52,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Typeface custom_font;
     private ProgressDialog progressDialog;
     private ImageButton imageButtonNewGame;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+
 
         respuesta = (TextView) findViewById(R.id.textViewRespuesta);
         custom_font = Typeface.createFromAsset(getAssets(),  "fonts/beermoney.ttf");
@@ -129,8 +135,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void saveHistory(String userId, String palabra, String tiempo, int errores, boolean gano){
+        DatabaseReference myRef = database.getReference();
+        String key = myRef.child("historial").child(userId).push().getKey();
+        Game game = new Game(userId, palabra, tiempo, errores, gano);
+        Map<String, Object> gameValues = game.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/historial/" + userId + "/" + key, gameValues);
+        //childUpdates.put("/user-historial/" + userId + "/" + key, gameValues);
+        myRef.updateChildren(childUpdates);
+    }
+
     public void gano(){
         chronometer.stop();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        saveHistory(user.getUid(), ahorcadoGame.getPalabra(), chronometer.getText().toString(), ahorcadoGame.getErrores(), ahorcadoGame.getGano());
+
         new AlertDialog.Builder(GameActivity.this)
                 .setMessage("¡Has ganado!")
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
@@ -149,6 +170,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void perdio(){
         //startActivity(new Intent(GameActivity.this, Pop.class));
         chronometer.stop();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        saveHistory(user.getUid(), ahorcadoGame.getPalabra(), chronometer.getText().toString(), ahorcadoGame.getErrores(), ahorcadoGame.getGano());
         new AlertDialog.Builder(GameActivity.this)
                 .setMessage("¡Perdiste!... La palabra era: " + ahorcadoGame.getPalabra())
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {

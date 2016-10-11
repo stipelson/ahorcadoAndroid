@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Ahorcado</string>
     <string name="auth_failed">Error de autenticación</string>
+    <string name="historial_de_juegos">Historial de juegos</string>
 </resources>

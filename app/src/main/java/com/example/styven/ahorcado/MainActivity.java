@@ -22,6 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private static final String TAG = "EmailPassword";
+    private User usuario;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         progressDialog = new ProgressDialog(this);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
@@ -67,6 +74,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonRegister.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
+    }
+
+    private void crearUsuario(String userId, String email){
+
+
+
+        //String key = mDatabase.child("usuarios").push().getKey();
+
+        User user = new User(email, email);
+
+        mDatabase.child("usuarios").child(userId).setValue(user);
+
+
     }
 
     private void registerUser(){
@@ -92,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                crearUsuario(user.getUid(), user.getEmail());
                                 finish();
                                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         }
@@ -119,12 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Log.e(TAG, e.getMessage());
                             }
                         }
-
                         progressDialog.dismiss();
                     }
                 });
-
-
     }
 
     @Override
