@@ -138,7 +138,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     Log.v(TAG, "Error en continuar:" + e.getMessage());
                     progressDialog.dismiss();
                     Toast.makeText(GameActivity.this, "No hay Partida guardada", Toast.LENGTH_SHORT).show();
-
+                    editTextLetterWord.setFocusable(false);
+                    editTextLetterWord.setVisibility(View.GONE);
+                    imageButtonNewGame.setVisibility(View.VISIBLE);
                     return;
                 }
             }
@@ -147,7 +149,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             public void onCancelled(DatabaseError databaseError) {
                 progressDialog.dismiss();
                 Toast.makeText(GameActivity.this, "Imposible obtener la partida guardada", Toast.LENGTH_SHORT).show();
-
+                editTextLetterWord.setFocusable(false);
+                editTextLetterWord.setVisibility(View.GONE);
+                imageButtonNewGame.setVisibility(View.VISIBLE);
                 return;
             }
         });
@@ -182,6 +186,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             public void onCancelled(DatabaseError databaseError) {
                 progressDialog.dismiss();
                 Toast.makeText(GameActivity.this, "Imposible obtener una palabra", Toast.LENGTH_SHORT).show();
+                editTextLetterWord.setFocusable(false);
+                editTextLetterWord.setVisibility(View.GONE);
+                imageButtonNewGame.setVisibility(View.VISIBLE);
                 return;
             }
         });
@@ -240,11 +247,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         imageButtonNewGame.setVisibility(View.VISIBLE);
     }
 
-    private void saveGame(){
-
-        DatabaseReference myRef = database.getReference();
-        Map<String, Object> gameValues = ahorcadoGame.toMap(chronometer.getText().toString());
-        myRef.child("continue").child(user.getUid()).setValue(gameValues);
+    private void saveGame() {
+        if (ahorcadoGame != null){
+            DatabaseReference myRef = database.getReference();
+            Map<String, Object> gameValues = ahorcadoGame.toMap(chronometer.getText().toString());
+            myRef.child("continue").child(user.getUid()).setValue(gameValues);
+        }
     }
 
     @Override
