@@ -112,9 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                                crearUsuario(user.getUid(), user.getEmail());
                                 finish();
                                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         }
