@@ -14,6 +14,7 @@ public class Game {
     public boolean gano;
     public String palabra;
     public int errores;
+    
 
     public Game() {
         // Default constructor required for calls to DataSnapshot.getValue(Post.class)
